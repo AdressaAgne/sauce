@@ -1,10 +1,10 @@
 {
   "name": "awesomesouce",
   "version": "4.0.0",
-  "description": "an awesome library filled with souce",
+  "description": "gulp lookalike",
   "main": "index.js",
   "scripts": {
-    "dev": "npx spack"
+    "dev": "node index.js"
   },
   "author": "Agne Ødegaard",
   "license": "ISC",

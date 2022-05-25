@@ -1,11 +1,14 @@
 # awesomesouce 4.0.0
 
+run: `$ npm i && npm run dev`
+
 ## todo
 
-[x] Prettier format on save
-[ ] SWC js compiler
-[ ] Backend js to static html server
-[ ] Image Processor, dcx support
-[ ] Build
-[ ] Deploy to mm.schibsted.media
-[ ] Auto create and update in CNP
+- [x] SWC compiler
+- [x] SCSS compiler
+- [x] copy command
+- [x] clean command
+- [x] server command
+- [ ] JS to generate static html
+- [ ] Image Processor
+- [ ] Build
