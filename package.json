@@ -2,9 +2,9 @@
   "name": "awesomesouce",
   "version": "4.0.0",
   "description": "gulp lookalike",
-  "main": "index.js",
+  "main": "souce.config.js",
   "scripts": {
-    "dev": "node index.js"
+    "dev": "node ."
   },
   "author": "Agne Ødegaard",
   "license": "ISC",

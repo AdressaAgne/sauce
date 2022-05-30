@@ -1,23 +1,6 @@
-import test from './test';
-console.log(test);
+const App = () => <div id="__app">
+    <p onClick={e => console.log}>Awesomesouce <strong>4.0.0</strong></p>
+</div>;
 
-const vNode = (...args) => args;
 
-class testing {
-    #hei = 1;
-    constructor() {
-        console.log(this.gen(), this.#hei);
-        this.#hei = 2;
-
-        console.log(this.gen(), this.#hei);
-    }
-    
-    gen() {
-        return <p>hei</p>
-    }
-}
-
-const h = new testing();
-console.log(h);
-
-console.log('hei');
+mount(<App />, '#__souce');
