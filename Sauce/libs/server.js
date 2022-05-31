@@ -4,10 +4,7 @@ const color = require('./color');
 /**
  * server setup
  */
-module.exports = server = ({
-    port = 1337,
-    logger = false
-}) => {
+module.exports = server = ({port = 1337, logger = false} = {}) => () => new Promise((resolve, reject) => {
     const server = fastify({
         logger
     });
@@ -17,6 +14,7 @@ module.exports = server = ({
     })
 
     server.listen(port, (err, address) => {
-        console.log('[Sauce]:', color.cyan('server:'), address);
+        if(err) return reject(err.message);
+        resolve(color.cyan('server: ') + address);
     });
-}
+});

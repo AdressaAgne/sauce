@@ -1,14 +1,23 @@
-const {tasks, watch, javascript, scss, server, copy} = require('./Sauce');
+const {
+    tasks,
+    queue,
+    watch,
+    javascript,
+    scss,
+    server,
+    copy,
+    clean
+} = require('./Sauce');
 
-
-const logFilename = (nr) => (file) => new Promise((resolve, reject) => resolve([nr, file]));
-
-
-javascript('src/app/app.js', 'dist/js/', {})();
-scss('src/scss/main.scss', 'dist/css/', {})();
-
-watch('src/**/*.js', javascript('src/app/app.js', 'dist/js/', {}), logFilename(1));
-watch('src/**/*.scss', scss('src/scss/main.scss', 'dist/css/', {}), logFilename(2));
-watch('src/**/*.html', copy('dist'), logFilename(3));
-
-server(1337);
+tasks('dist',
+        clean('dist'),
+        javascript('src/js/app.js', 'dist/js/', {}),
+        scss('src/scss/main.scss', 'dist/css/', {}),
+        server()
+    )
+    .then(tasks('src/**/*.html', copy('dist')))
+    .then((messages) => {
+        watch('src/**/*.js', javascript('src/js/app.js', 'dist/js/', {}));
+        watch('src/**/*.scss', scss('src/scss/main.scss', 'dist/css/', {}));
+        watch('src/**/*.html', copy('dist'));
+    });

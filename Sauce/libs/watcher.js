@@ -1,6 +1,6 @@
 const fs = require('fs');
 const { glob } = require('glob');
-const {tasks} = require('./task');
+const {queue} = require('./task');
 const color = require('./color');
 
 const watch = async (files, ...callbacks) => {
@@ -18,7 +18,7 @@ const watch = async (files, ...callbacks) => {
             interval: 200
         };
         fs.watchFile(file, options, () => {
-            tasks([file], ...callbacks)
+            queue([file], callbacks, [], false)
                 .then((success) => console.log(success))
                 .catch((err) => console.error(err));
         });

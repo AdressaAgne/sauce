@@ -73,7 +73,7 @@ const bundler = (file, dist, options) => {
                 if(map) writeFiles.push(writeFile(distMapPath, map));
             });
 
-            return Promise.all(writeFiles).then(() => 'SWC bundler done');
+            return Promise.all(writeFiles).then(() => '');
         });
 };
 

@@ -17,7 +17,7 @@ module.exports = (file, dist, options) => {
             const content = data.css.toString();
 
             writeFile(filename, content)
-                .then(() => resolve('Scss bundler done'), reject);
+                .then(resolve, reject);
         });
     })
 };
