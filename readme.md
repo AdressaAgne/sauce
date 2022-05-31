@@ -1,4 +1,4 @@
-# awesomesouce 4.0.0
+# awesomesauce 4.0.0
 
 run: `$ npm i && npm run dev`
 

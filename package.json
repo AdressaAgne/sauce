@@ -1,10 +1,10 @@
 {
-  "name": "awesomesouce",
+  "name": "awesomesauce",
   "version": "4.0.0",
   "description": "gulp lookalike",
-  "main": "index.js",
+  "main": "sauce.config.js",
   "scripts": {
-    "dev": "node index.js"
+    "dev": "node ."
   },
   "author": "Agne Ødegaard",
   "license": "ISC",
@@ -12,53 +12,9 @@
     "@fastify/static": "^5.0.2",
     "@swc/cli": "^0.1.57",
     "@swc/core": "^1.2.194",
+    "cli-progress": "^3.11.1",
     "fastify": "^3.29.0",
     "glob": "^8.0.3",
     "node-sass": "^7.0.1"
-  },
-  "swc": {
-    "sourceMaps": true,
-    "minify": true,
-    "jsc": {
-      "target": "es5",
-      "parser": {
-        "syntax": "ecmascript",
-        "jsx": true,
-        "dynamicImport": false,
-        "privateMethod": true,
-        "functionBind": false,
-        "exportDefaultFrom": false,
-        "exportNamespaceFrom": false,
-        "decorators": false,
-        "decoratorsBeforeExport": false,
-        "topLevelAwait": false,
-        "importMeta": false,
-        "preserveAllComments": false
-      },
-      "transform": {
-        "react": {
-          "pragma": "vNode",
-          "pragmaFrag": "vFragment",
-          "throwIfNamespace": true,
-          "development": false,
-          "useBuiltins": false
-        },
-        "optimizer": {
-          "globals": {
-            "vars": {
-              "__DEBUG__": "true"
-            }
-          }
-        }
-      }
-    },
-    "$schema": "http://json.schemastore.org/swcrc",
-    "module": {
-      "type": "commonjs",
-      "strict": false,
-      "strictMode": true,
-      "lazy": false,
-      "noInterop": false
-    }
   }
 }
