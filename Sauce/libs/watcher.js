@@ -19,7 +19,7 @@ const watch = async (files, ...callbacks) => {
         };
         fs.watchFile(file, options, () => {
             queue([file], callbacks, [], false)
-                .then((success) => console.log(success))
+                .then((success) => console.log('done', file))
                 .catch((err) => console.error(err));
         });
     });
