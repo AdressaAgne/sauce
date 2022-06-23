@@ -9,6 +9,3 @@ const App = ({attrs}) => <div id="__app">
 const vApp = <App id="hei" />;
 const $app = mount(vApp, '#__sauce');
 
-
-
-console.log($app, vApp);
