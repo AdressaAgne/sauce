@@ -1,11 +1,26 @@
+
+
+const style = 
+<style lang="scss">
+    {"ul { li {color: red;}}"}
+</style>
+
+const App = () => 
+<article>
+    <h1>Agne.no</h1>
+    <ul>
+        {new Array(100).fill(null).map((_, i) => <li>{i+1}</li>)}
+    </ul>
+    {style}
+</article>
+
+
+
+
+
+
+/**
+ * Includes
+ */
 import {vNode, vFragment, mount} from './vDom';
-
-
-const App = ({attrs}) => <div id="__app">
-    <p onClick={e => console.log}>Awesomesauce <strong>4.0.0</strong>, {JSON.stringify(attrs)}, {1}, {undefined}, {null}</p>
-</div>;
-
-
-const vApp = <App id="hei" />;
-const $app = mount(vApp, '#__sauce');
-
+mount(<App />, window.env.id);

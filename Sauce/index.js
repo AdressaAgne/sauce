@@ -5,6 +5,9 @@ const config = Object.assign({
     title : 'Sauce',
     id : '__sauce',
     dist : 'dist',
+    env : {
+        
+    }
 }, require('../sauce.config'));
 
 const task = require('./libs/task');

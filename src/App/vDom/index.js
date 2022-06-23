@@ -1,17 +1,17 @@
 export const vFragment = Symbol('vFragment');
 
 export const vNode = (tag, attrs = [], ...children) => {
+
+    children = children.flat(Infinity);
+
     // Is component
     if(typeof tag == 'function') {
-        const vComponent = tag({attrs, children});
-
-        return vComponent;
+        return {callback : tag, attrs, children};
     }
 
     // is fragment
     if(tag == vFragment) {
-        const vFragment = children;
-        return vFragment;
+        tag = 'div';
     }
 
     const node = {
@@ -20,7 +20,6 @@ export const vNode = (tag, attrs = [], ...children) => {
         children
     }
 
-    console.log('vNode', tag, attrs, children);
 
     return node
 }

@@ -4,7 +4,7 @@ const writeFile = require('../writeFile');
 
 const transformOptions = {
     "sourceMaps": true,
-    "minify": true,
+    "minify": false,
     "jsc": {
         "target": "es5",
         "parser": {
