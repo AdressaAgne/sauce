@@ -11,13 +11,13 @@ module.exports = (file, dist, options) => {
 
     return (_) => new Promise((resolve, reject) => {
         sass.render({ file: options.entry }, (error, data) => {
-            if (error) return reject(error);
+            if (error) return reject(error.formatted);
 
             const filename = output.replace('.scss', '.css');
             const content = data.css.toString();
 
             writeFile(filename, content)
-                .then(resolve, reject);
+                .then(() => resolve({info : {html : true}}), reject);
         });
     })
 };

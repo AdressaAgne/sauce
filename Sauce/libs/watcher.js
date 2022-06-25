@@ -3,7 +3,7 @@ const { glob } = require('glob');
 const {queue} = require('./task');
 const color = require('./color');
 
-const watch = async (files, ...callbacks) => {
+const watch = (files, ...callbacks) => {
     if(typeof files === 'string') {
         return glob(files, (err, files) => {
             if(err) return console.log(err);
@@ -17,10 +17,15 @@ const watch = async (files, ...callbacks) => {
         const options = {
             interval: 200
         };
+
         fs.watchFile(file, options, () => {
-            queue([file], callbacks, [], false)
-                .then((success) => console.log('done', file))
-                .catch((err) => console.error(err));
+            queue([file], callbacks, [])
+                .then((success) => {
+                    console.log(color.green('[Sauce]:'), 'file changed ' + file);
+                })
+                .catch((err) => {
+                    console.log(color.red('[Sauce]:'), 'file changed ' + file);
+                });
         });
     });
 }

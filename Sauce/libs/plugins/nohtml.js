@@ -1,6 +1,7 @@
 const path = require('path');
 const writeFile = require('../writeFile');
 
+
 const template = ({title, cssFile, id, jsFile, env}) => /*html*/`
 <!DOCTYPE html>
     <html lang="en">
@@ -19,4 +20,8 @@ const template = ({title, cssFile, id, jsFile, env}) => /*html*/`
 `.trim();
 
 
-module.exports = (config, dir) => (_) => writeFile(path.join(process.cwd(), dir, 'index.html'), template(config));
+module.exports = (config, dir, err) => (f, prevTasks = []) => {
+    if(!prevTasks.find(t => t && t?.info?.html)) return new Promise((r) => r());
+
+    return writeFile(path.join(process.cwd(), dir, 'index.html'), template(config));
+}

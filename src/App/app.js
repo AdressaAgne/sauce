@@ -1,20 +1,12 @@
 
 
-const style = 
-<style lang="scss">
-    {"ul { li {color: red;}}"}
-</style>
-
 const App = () => 
 <article>
     <h1>Agne.no</h1>
     <ul>
         {new Array(100).fill(null).map((_, i) => <li>{i+1}</li>)}
     </ul>
-    {style}
 </article>
-
-
 
 
 
@@ -22,5 +14,5 @@ const App = () =>
 /**
  * Includes
  */
-import {vNode, vFragment, mount} from './vDom';
+import {vNode, vFragment, mount} from '../../Sauce/libs/templates/vDom';
 mount(<App />, window.env.id);

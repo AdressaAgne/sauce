@@ -15,6 +15,6 @@ module.exports = server = ({port = 1337, logger = false} = {}) => () => new Prom
 
     server.listen(port, (err, address) => {
         if(err) return reject(err.message);
-        resolve(color.cyan('server: ') + address);
+        resolve({out : color.cyan('server: ') + address});
     });
 });

@@ -7,6 +7,51 @@ const config = Object.assign({
     dist : 'dist',
     env : {
         
+    },
+    swc : {
+        "sourceMaps": true,
+        "minify": false,
+        "jsc": {
+            "target": "es5",
+            "parser": {
+                "syntax": "ecmascript",
+                "jsx": true,
+                "dynamicImport": false,
+                "privateMethod": true,
+                "functionBind": false,
+                "exportDefaultFrom": false,
+                "exportNamespaceFrom": false,
+                "decorators": false,
+                "decoratorsBeforeExport": false,
+                "topLevelAwait": false,
+                "importMeta": false,
+                "preserveAllComments": false
+            },
+            "transform": {
+                "react": {
+                    "pragma": "vNode",
+                    "pragmaFrag": "vFragment",
+                    "throwIfNamespace": true,
+                    "development": false,
+                    "useBuiltins": false
+                },
+                "optimizer": {
+                    "globals": {
+                        "vars": {
+                            "__DEBUG__": "true"
+                        }
+                    }
+                }
+            }
+        },
+        "$schema": "http://json.schemastore.org/swcrc",
+        "module": {
+            "type": "commonjs",
+            "strict": false,
+            "strictMode": true,
+            "lazy": false,
+            "noInterop": false
+        }
     }
 }, require('../sauce.config'));
 
@@ -32,16 +77,20 @@ const {
 
 tasks('dist',
         clean(config.dist),
+
         nohtml(config, config.dist),
-        javascript('src/App/app.js', path.join(config.dist, 'js'), {}),
-        scss('src/scss/main.scss',  path.join(config.dist, 'css'), {}),
+
+        javascript('src/App/app.js', path.join(config.dist, 'js'), config),
+        scss('src/scss/main.scss',  path.join(config.dist, 'css'), {config}),
+        
+
         server({port : config?.server?.port || 3000})
     )
     
     .then(tasks('src/**/*.html', copy(config.dist)))
 
     .then((messages) => {
-        watch('src/**/*.js', javascript('src/App/app.js',  path.join(config.dist, 'js'), {}));
-        watch('src/**/*.scss', scss('src/scss/main.scss',  path.join(config.dist, 'css'), {}));
+        watch('src/**/*.js', javascript('src/App/app.js',  path.join(config.dist, 'js'), config), nohtml(config, config.dist));
+        watch('src/**/*.scss', scss('src/scss/main.scss',  path.join(config.dist, 'css'), {config}), nohtml(config, config.dist));
         watch('src/**/*.html', copy(config.dist));
     });
