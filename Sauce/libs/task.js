@@ -3,23 +3,32 @@ const color = require('./color');
 const cliProgress = require('cli-progress');
 const writeError = require('./plugins/writeError');
 const clean = require('./plugins/clean');
+const path = require('path');
 
-const task = (files, callback, values) => new Promise((resolve, reject) => {
+const task = (files, callback, values) => new Promise(async (resolve, reject) => {
     if (!callback || typeof callback !== 'function') return reject({
         error: 'callback of task is not a function'
     });
 
     if (typeof files === 'string') {
-        return glob(files, (err, arr) => {
+        return glob(files, async (err, arr) => {
             if (err) return reject(err);
-            callback(arr, values).then(resolve, reject);
+            await callback(arr, values).then(resolve, reject);
         });
     }
 
-    return callback(files, values).then(resolve, reject);
+    if(typeof files == 'object' && files.path) {
+        return glob(files.path, async (err, _files) => {
+            if(err) return console.log(err);
+            if(files.not) _files = _files.filter(file => !files.not.includes(path.extname(file)));
+            await callback(_files, values).then(resolve, reject);
+        });
+    }
+
+    return await callback(files, values).then(resolve, reject);
 });
 
-const queue = (files, callbacks, values = []) => new Promise(async (resolve, reject) => {
+const queue = async (files, callbacks, values = []) => new Promise(async (resolve, reject) => {
     const bar = new cliProgress.MultiBar({
             format: color.cyan('{bar}') + ' {value}/{total} Tasks',
             barCompleteChar: '\u2588',

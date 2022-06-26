@@ -12,16 +12,22 @@ module.exports = server = ({
 
     // Create a local server to receive data from
     const server = http.createServer((req, res) => {
+        res.setHeader("server", "Sauce");
+
         const url = req.url;
         const error = (err, _, res) => {
-            res.writeHead(404, { 'Content-Type': 'text/html' });
+            res.writeHead(404, {
+                'Content-Type': 'text/html'
+            });
             res.end(require('./templates/error')(err));
         }
 
         const sendFile = (file, _, res) => fs.access(file)
             .then(() => fs.readFile(file), err => error(err, _, res))
             .then(contents => {
-                res.writeHead(200, { 'Content-Type': mime.lookup(path.extname(file)) || 'text/plain' });
+                res.writeHead(200, {
+                    'Content-Type': mime.lookup(path.extname(file)) || 'text/plain'
+                });
                 res.end(contents);
             }, err => error(err, _, res));
 

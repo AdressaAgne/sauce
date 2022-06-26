@@ -4,8 +4,18 @@ const path = require('path');
 const blacklisted = ['src', 'node_modules', 'Sauce'];
 
 module.exports = (dir) => {
-    return (_) => new Promise((resolve, reject) => {
+    return (_) => new Promise(async (resolve, reject) => {
+
         dir = path.normalize(dir);
+
+        let needCleaning = true;
+
+        fs.access(path.join(process.cwd(), dir)).then(() => {}, () => {
+            needCleaning = false;
+            resolve()
+        });
+
+        if(!needCleaning) return;
 
         for (let i = 0; i < blacklisted.length; i++) {
             const item = path.normalize(blacklisted[i]);
@@ -14,8 +24,6 @@ module.exports = (dir) => {
             }
         }
 
-        return fs.rm(path.join(process.cwd(), dir), {recursive : true})
-            .then(() => resolve())
-            .catch(() => resolve())
+        return await fs.rm(dir, {recursive : true}).then(resolve, resolve)
     });
 }

@@ -2,12 +2,21 @@ const fs = require('fs');
 const { glob } = require('glob');
 const {queue} = require('./task');
 const color = require('./color');
+const path = require('path');
 
 const watch = (files, ...callbacks) => {
     if(typeof files === 'string') {
         return glob(files, (err, files) => {
             if(err) return console.log(err);
             watch(files, ...callbacks);
+        });
+    }
+
+    if(typeof files == 'object' && files.path) {
+        return glob(files.path, (err, _files) => {
+            if(err) return console.log(err);
+            if(files.not) _files = _files.filter(file => !files.not.includes(path.extname(file)));
+            watch(_files, ...callbacks);
         });
     }
 

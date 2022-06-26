@@ -78,20 +78,14 @@ const {
 
 tasks('dist',
         clean(config.dist),
-
         nohtml(config, config.dist),
-
         javascript('src/App/app.js', path.join(config.dist, 'js'), config),
         scss('src/scss/main.scss',  path.join(config.dist, 'css'), {config}),
-        
-
-        server({port : config?.server?.port || 3000})
+        () => tasks({path : 'src/**/*.*', not : ['.js', '.scss']}, copy(config.dist)),
+        server({port : config?.server?.port || 3000}),
     )
-    
-    .then(tasks('src/**/*.html', copy(config.dist)))
-
     .then((messages) => {
         watch('src/**/*.js', javascript('src/App/app.js',  path.join(config.dist, 'js'), config), nohtml(config, config.dist));
         watch('src/**/*.scss', scss('src/scss/main.scss',  path.join(config.dist, 'css'), {config}), nohtml(config, config.dist));
-        watch('src/**/*.html', copy(config.dist));
+        watch({path : 'src/**/*.*', not : ['.js', '.scss']}, copy(config.dist));
     });

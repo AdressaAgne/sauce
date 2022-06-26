@@ -20,3 +20,13 @@ Simple lib to generate js and css. trying use the least amount of packages.
 - [ ] JS to generate static html
 - [ ] Image Processor
 - [ ] Build
+
+
+Packages and reasoning:
+ - @swc/cli" : Compile JS
+ - @swc/core : Compile JS
+ - node-sass : Compile Sass
+ - ansi-to-html : convert shell error messages
+ - cli-progress : i'm lazy... should be removed
+ - glob : could probably be removed, but makes things easy.
+ - mime-types : its a big DB of mime-types, takes forever to do manually.
