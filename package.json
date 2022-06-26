@@ -11,10 +11,10 @@
   "devDependencies": {
     "@swc/cli": "^0.1.57",
     "@swc/core": "^1.2.194",
-    "node-sass": "^7.0.1",
-
     "ansi-to-html": "^0.7.2",
     "cli-progress": "^3.11.1",
-    "glob": "^8.0.3"
+    "glob": "^8.0.3",
+    "mime-types": "^2.1.35",
+    "node-sass": "^7.0.1"
   }
 }
