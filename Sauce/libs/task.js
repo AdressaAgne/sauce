@@ -2,6 +2,7 @@ const glob = require('glob');
 const color = require('./color');
 const cliProgress = require('cli-progress');
 const writeError = require('./plugins/writeError');
+const clean = require('./plugins/clean');
 
 const task = (files, callback, values) => new Promise((resolve, reject) => {
     if (!callback || typeof callback !== 'function') return reject({
@@ -34,7 +35,7 @@ const queue = (files, callbacks, values = []) => new Promise(async (resolve, rej
 
     for await (const callback of callbacks) {
         await task(files, callback, values)
-            .then((success) => {
+            .then(async (success) => {
                 b1.increment();
                 if(success && success?.out) bar.log(color.green('[Sauce]: ') + success.out + "\n");
                 values.push(success);
@@ -50,11 +51,17 @@ const queue = (files, callbacks, values = []) => new Promise(async (resolve, rej
 
     bar.stop();
 
+    let cleanError = true;
     for (let i = 0; i < messages.length; i++) {
         const {error, success} = messages[i];
-        if(error) console.error(color.red('[Sauce]:'), error);
+        if(error) {
+            console.error(color.red('[Sauce]:'), error);
+            cleanError = false;
+        }
         if(success && success?.out) console.error(color.green('[Sauce]:'), success.out);
     }
+
+    if(cleanError) await clean('dist/_error.html')();
 
     resolve(values);
 });

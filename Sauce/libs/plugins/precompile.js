@@ -20,6 +20,4 @@ const template = ({title, cssFile, id, jsFile, env}) => /*html*/`
 `.trim();
 
 
-module.exports = (config, dir, err) => (f, prevTasks = []) => {
-    return writeFile(path.join(process.cwd(), dir, 'index.html'), template(config));
-}
+module.exports = (config, dir) => (_) => writeFile(path.join(process.cwd(), dir, 'index.html'), template(config));

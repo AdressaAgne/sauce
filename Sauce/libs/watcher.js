@@ -11,7 +11,7 @@ const watch = (files, ...callbacks) => {
         });
     }
 
-    console.log('[Sauce]:', color.cyan('watching'), files.length > 1 ? color.green(files[0]) + ' and ' + color.green(files.length-1) + ' other files' : color.green(files.join(', ')));
+    console.log('[Sauce]:', color.cyan('watching'), files.length > 2 ? color.green(files[0]) + ' and ' + color.green(files.length-1) + ' other files' : color.green(files.join(' and ')));
 
     files.forEach(file => {
         const options = {
@@ -24,7 +24,7 @@ const watch = (files, ...callbacks) => {
                     console.log(color.green('[Sauce]:'), 'file changed ' + file);
                 })
                 .catch((err) => {
-                    console.log(color.red('[Sauce]:'), 'file changed ' + file);
+                    console.log(color.red('[Sauce]:'), 'file changed with error ' + file);
                 });
         });
     });

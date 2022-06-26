@@ -47,10 +47,11 @@ const config = Object.assign({
         "$schema": "http://json.schemastore.org/swcrc",
         "module": {
             "type": "commonjs",
-            "strict": false,
+            "strict": true,
             "strictMode": true,
             "lazy": false,
             "noInterop": false
+            
         }
     }
 }, require('../sauce.config'));
