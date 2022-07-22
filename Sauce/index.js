@@ -5,12 +5,13 @@ const config = Object.assign({
     title : 'Sauce',
     id : '__sauce',
     dist : 'dist',
+    sizes : [480, 680, 1080, 1280, 1680, 1920],
     env : {
         
     },
     swc : {
         "sourceMaps": true,
-        "minify": false,
+        "minify": true,
         "jsc": {
             "target": "es5",
             "parser": {
@@ -70,7 +71,8 @@ const {
     scss,
     copy,
     clean,
-    nohtml
+    nohtml,
+    images
 } = {
     ...task,
     ...plugins
@@ -81,8 +83,9 @@ tasks('dist',
         nohtml(config, config.dist),
         javascript('src/App/app.js', path.join(config.dist, 'js'), config),
         scss('src/scss/main.scss',  path.join(config.dist, 'css'), {config}),
-        () => tasks({path : 'src/**/*.*', not : ['.js', '.scss']}, copy(config.dist)),
+        () => tasks({path : 'src/**/*.*', not : ['.js', '.scss', '.jpeg', '.jpg', '.png', '.json']}, copy(config.dist)),
         server({port : config?.server?.port || 3000}),
+        () => tasks('src/assets/**/*.*', images(config,  path.join(config.dist, 'assets')))
     )
     .then((messages) => {
         watch('src/**/*.js', javascript('src/App/app.js',  path.join(config.dist, 'js'), config), nohtml(config, config.dist));

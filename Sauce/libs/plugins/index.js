@@ -3,5 +3,6 @@ module.exports = {
     scss : require('./scss'),
     copy : require('./copy'),
     clean : require('./clean'),
-    nohtml : require('./nohtml')
+    nohtml : require('./nohtml'),
+    images : require('./responsiveImages')
 }

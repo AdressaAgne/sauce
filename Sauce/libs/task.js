@@ -13,7 +13,7 @@ const task = (files, callback, values) => new Promise(async (resolve, reject) =>
     if (typeof files === 'string') {
         return glob(files, async (err, arr) => {
             if (err) return reject(err);
-            await callback(arr, values).then(resolve, reject);
+            await callback(arr, values, files).then(resolve, reject);
         });
     }
 
@@ -21,11 +21,11 @@ const task = (files, callback, values) => new Promise(async (resolve, reject) =>
         return glob(files.path, async (err, _files) => {
             if(err) return console.log(err);
             if(files.not) _files = _files.filter(file => !files.not.includes(path.extname(file)));
-            await callback(_files, values).then(resolve, reject);
+            await callback(_files, values, files).then(resolve, reject);
         });
     }
 
-    return await callback(files, values).then(resolve, reject);
+    return await callback(files, values, files).then(resolve, reject);
 });
 
 const queue = async (files, callbacks, values = []) => new Promise(async (resolve, reject) => {

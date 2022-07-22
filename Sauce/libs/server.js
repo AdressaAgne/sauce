@@ -23,13 +23,13 @@ module.exports = server = ({
         }
 
         const sendFile = (file, _, res) => fs.access(file)
-            .then(() => fs.readFile(file), err => error(err, _, res))
-            .then(contents => {
+            .then(() => fs.readFile(file).then(contents => {
                 res.writeHead(200, {
                     'Content-Type': mime.lookup(path.extname(file)) || 'text/plain'
                 });
                 res.end(contents);
-            }, err => error(err, _, res));
+            }, err => error(err, _, res)), err => error(err, _, res))
+            
 
         const pages = {
             '/': (...args) => {

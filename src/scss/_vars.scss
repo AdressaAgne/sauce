@@ -1,3 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab&family=Roboto:wght@100;400;700&display=swap');
+
+@mixin mobile() {
+    @media (max-width: 480px) {
+        @content;
+    }
+}
+@mixin mobile-big() {
+    @media (max-width: 768px) {
+        @content;
+    }
+}
+
 :root {
+    --color-white: #f9f9f9;
+    --color-black: #161820;
+    --color-gray: #979797;
+    
+    --color-1: #356cc5;
+    --color-2: #00ca6d;
+    
+    --color-text: var(--color-black);
+    --color-background: var(--color-white);
+
+    --color-dark: #0c0b15;
+    --color-light: #e0e0e0;
+
+    --color-on-background: var(--color-light);
+    
+    --color-gradient: linear-gradient(60deg, var(--color-1), var(--color-2));
+    
     font-size: 16px;
+
+    --font-headline: 'Roboto Slab', serif;
+    --font-system: 'Roboto', serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-text: var(--color-white);
+        --color-background: var(--color-black);
+        --color-on-background: var(--color-dark);
+    }
 }

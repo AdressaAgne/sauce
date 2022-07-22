@@ -7,7 +7,10 @@ export const render = (vNode, $parent) => {
 
     if (vNode.callback && typeof vNode.callback == 'function') {
         const {attrs} = vNode;
-        vNode = vNode.callback({ state: {}, ...vNode });
+        vNode = vNode.callback({ state: {}, ...vNode, onMount(callback) {
+            vNode.mounted = callback;
+        } });
+
         vNode.attrs = {...attrs, ...vNode.attrs};
         vNode.$element = render(vNode, $parent);
         return vNode.$element || vNode;
@@ -29,14 +32,27 @@ export const render = (vNode, $parent) => {
                 continue;
             }
 
+            if(key == 'if') {
+                if(!value) return false;
+                continue;
+            } 
+
+            if(key.slice(0, 1) == '$') {
+                continue;
+            } 
+
             $node.setAttribute(key, value);
         }
     }
 
     // Append children
     for (let i = 0; i < vNode.children.length; i++) {
-        const $vChild = render(vNode.children[i], $node);
-        $node.appendChild($vChild);
+        const vChild = vNode.children[i];
+        const $vChild = render(vChild, $node);
+        if($vChild) {
+            $node.appendChild($vChild);
+            if(vChild.mounted) vChild.mounted.call(vChild, $vChild);
+        }
     }
 
     return $node;
@@ -46,13 +62,19 @@ const reMountChild = (vNode) => {
     const $oldNode = vNode.$element;
     const $parent = $oldNode.parentElement;
     const $node = render(vNode, $parent);
-    $parent.replaceChild($node, $oldNode);
+    if($node) {
+        $parent.replaceChild($node, $oldNode);
+        if(vNode.mounted) vNode.mounted.call(vNode, $node);
+    }
 }
 
 
 export const mount = (vNode, selector) => {
     const $parent = selector instanceof HTMLElement ? selector : document.querySelector(selector);
     const $node = render(vNode, $parent);
-    if(vNode) $parent.parentElement.replaceChild($node, $parent);
+    if(vNode && $node){
+        $parent.parentElement.replaceChild($node, $parent);
+        if(vNode.mounted) vNode.mounted.call(vNode, $node);
+    }
     return $node;
 }

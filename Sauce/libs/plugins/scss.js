@@ -10,7 +10,7 @@ module.exports = (file, dist, options) => {
     const output = path.join(process.cwd(), dist, path.basename(file));
 
     return (_) => new Promise((resolve, reject) => {
-        sass.render({ file: options.entry }, (error, data) => {
+        sass.render({ file: options.entry, outputStyle: "compressed" }, (error, data) => {
             if (error) return reject(error.formatted);
 
             const filename = output.replace('.scss', '.css');

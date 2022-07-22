@@ -9,12 +9,12 @@ const template = ({title, cssFile, id, jsFile, env}) => /*html*/`
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>${title}</title>
-        <link rel="stylesheet" href="css/${cssFile}.css">
+        <link rel="stylesheet" href="/css/${cssFile}.css">
     </head>
     <body>
-        <div id="${id}"></div>
+        <div id="${id}">laster...</div>
         <script>window.env = ${JSON.stringify({id : '#'+id, ...env})}</script>
-        <script src="js/${jsFile}.js"></script>
+        <script src="/js/${jsFile}.js"></script>
     </body>
 </html>
 `.trim();
