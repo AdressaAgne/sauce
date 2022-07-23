@@ -14,7 +14,7 @@ const observer = new IntersectionObserver((entries) => {
 
 const devicePixelRatio = window.devicePixelRatio || 1;
 
-const getClosestSize = (size, sizes = [480, 680, 1080, 1280, 1680, 1920]) => sizes.reduce((p, c) => (Math.abs(c - size) < Math.abs(p - size) ? c : p));
+const getClosestSize = (size, sizes = [480, 680, 1080, 1280, 1680, 1920]) => sizes.sort((a, b) => a - b).find((value) => value >= size);
 
 export default ({attrs : {$src}, onMount}) => {
     const src = (size = 1080) => assetsDir + $src + '-' + size + '.webp';
@@ -22,7 +22,8 @@ export default ({attrs : {$src}, onMount}) => {
     onMount($elm => {
         callbackMap.set($elm, (observer) => {
             const rect = $elm.parentElement.getBoundingClientRect();
-            $elm.src = src(getClosestSize(rect.width * devicePixelRatio));
+            const width = rect.width * devicePixelRatio;
+            $elm.src = src(getClosestSize(width));
             observer.unobserve($elm);
         });
         observer.observe($elm);

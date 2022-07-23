@@ -1,6 +1,6 @@
 {
-  "name": "awesomesauce",
-  "version": "4.0.0",
+  "name": "Sauce",
+  "version": "1.0.0",
   "description": "gulp lookalike",
   "main": "sauce.config.js",
   "scripts": {

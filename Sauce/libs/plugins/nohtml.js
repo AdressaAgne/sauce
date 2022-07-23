@@ -1,21 +1,28 @@
 const path = require('path');
 const writeFile = require('../writeFile');
 
+const attrs = attr => Object.entries(attr).map(([key, value], i) => `${key}="${value}"`).join(' ');
 
-const template = ({title, cssFile, id, jsFile, env}) => /*html*/`
+const tag = (tag, attr, closing = false) => {
+    return closing ? `<${tag} ${attrs(attr)}></${tag}>` : `<${tag} ${attrs(attr)} />`;
+}
+
+const template = ({title, cssFile, id, jsFile, meta = [], links = [], env}) => /*html*/`
 <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${title}</title>
-        <link rel="stylesheet" href="/css/${cssFile}.css">
-    </head>
-    <body>
-        <div id="${id}">laster...</div>
-        <script>window.env = ${JSON.stringify({id : '#'+id, ...env})}</script>
-        <script src="/js/${jsFile}.js"></script>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    ${meta.map(attr => tag('meta', attr)).join("\n\t")}
+    ${links.map(attr => tag('link', attr)).join("\n\t")}
+    <title>${title}</title>
+    <link rel="stylesheet" href="/css/${cssFile}.css">
+</head>
+<body>
+    <div id="${id}">laster...</div>
+    <script>window.env = ${JSON.stringify({id : '#'+id, ...env})}</script>
+    <script src="/js/${jsFile}.js"></script>
+</body>
 </html>
 `.trim();
 

@@ -16,7 +16,7 @@ const Article = ({attrs : {$item : item}}) =>
 <article class={'publication' + (item.image ? '' : ' no-image')}>
     <a href={item.url || '#'}>
         <header if={item.image}>
-            <Img $src={'images/'+item.image} />
+            <Img $src={'images/'+item.image} alt="image of publication" />
         </header>
         <main>
             <h3 class="title">{item.title}</h3>
@@ -45,7 +45,7 @@ const About = () =>
 <section class="about">
     <h1 class="title">Curriculum Vitae</h1>
     <section class="profile">
-        <Img $src="me" />
+        <Img $src="me" alt="image of me" />
     </section>
     <section class="content">
         <p class="name">Agne Ødegaard</p>
