@@ -7,6 +7,9 @@ import experience from './data/experience.json';
 import projects from './data/publication_img.json';
 import tech from './data/tech.json';
 import Img from './Img';
+import Zoomable from './Zoomable';
+
+import images from './data/files.json';
 
 /**
  * Components
@@ -54,6 +57,29 @@ const About = () =>
     </section>
 </section>
 
+
+
+const Experience = () =>
+<section class="grid">
+    {experience.map(item => <Article $item={item} />)}
+</section>
+
+const Projects = () => 
+<section class="grid">
+    {projects.map(item => <Article $item={item} />)}
+</section>
+
+const Busswords = () => 
+<ul class="buzzwords">
+    {tech.map(item => <li><span>{item}</span></li>)}
+</ul>
+
+const Photos = () => 
+<section class="grid">
+    {images.photos.map(img => <Zoomable $src={'photos/' + img} alt="photo" />)}
+</section>
+
+
 const App = () => 
 <article class="viewport">
     <header>
@@ -61,17 +87,16 @@ const App = () =>
     </header>
     <main>
         <h2>Experience & Education</h2>
-        <section class="grid">
-            {experience.map(item => <Article $item={item} />)}
-        </section>
+        <Experience />
+        
         <h2>Publications</h2>
-        <section class="grid">
-            {projects.map(item => <Article $item={item} />)}
-        </section>
+        <Projects />
+        
         <h2>Buzzwords</h2>
-        <ul class="buzzwords">
-            {tech.map(item => <li><span>{item}</span></li>)}
-        </ul>
+        <Busswords />
+
+        <h2>Photos</h2>
+        <Photos />
     </main>
     <footer>
         <Contact />

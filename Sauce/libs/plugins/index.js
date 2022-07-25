@@ -4,5 +4,6 @@ module.exports = {
     copy : require('./copy'),
     clean : require('./clean'),
     nohtml : require('./nohtml'),
-    images : require('./responsiveImages')
+    images : require('./responsiveImages'),
+    files2JSON : require('./filestojson')
 }

@@ -1,5 +1,7 @@
 export const render = (vNode, $parent) => {
-    if(typeof vNode == 'function') return render(vNode(), $parent);
+    if(typeof vNode == 'function') {
+        return render(vNode(), $parent);
+    }
 
     if (!(vNode instanceof Object)) return document.createTextNode(String(vNode));
 
@@ -7,19 +9,26 @@ export const render = (vNode, $parent) => {
 
     if (vNode.callback && typeof vNode.callback == 'function') {
         const {attrs} = vNode;
-        vNode = vNode.callback({ state: {}, ...vNode, onMount(callback) {
-            vNode.mounted = callback;
-        } });
+        const vComponentNode = vNode.callback({ 
+            state: {}, 
+            ...vNode
+        });
 
-        vNode.attrs = {...attrs, ...vNode.attrs};
-        vNode.$element = render(vNode, $parent);
-        return vNode.$element || vNode;
+        vNode.dispatch('created', vNode);
+        
+        vComponentNode.attrs = {...attrs, ...vComponentNode.attrs};
+        vComponentNode.$element = render(vComponentNode, $parent);
+        vNode._evt.merge(vComponentNode._evt);
+
+        return vComponentNode.$element || vComponentNode;
     }
 
 
     // Create the tag
-    const $node = document.createElement(vNode.tagName);
-    vNode.$element = $node;
+    const $vNode = document.createElement(vNode.tagName);
+    vNode.$element = $vNode;
+
+    vNode.dispatch('created', vNode);
 
 
     // set attributes
@@ -28,7 +37,10 @@ export const render = (vNode, $parent) => {
             const value = vNode.attrs[key];
 
             if (key.slice(0, 2) == 'on') {
-                $node.addEventListener(key.slice(2).toLowerCase(), (e) => value.call($node, e, vNode));
+                $vNode.addEventListener(key.slice(2).toLowerCase(), (e) => {
+                    value.call($vNode, e, $vNode, vNode);
+                });
+                
                 continue;
             }
 
@@ -41,40 +53,46 @@ export const render = (vNode, $parent) => {
                 continue;
             } 
 
-            $node.setAttribute(key, value);
+            $vNode.setAttribute(key, value);
         }
     }
 
     // Append children
     for (let i = 0; i < vNode.children.length; i++) {
         const vChild = vNode.children[i];
-        const $vChild = render(vChild, $node);
+        const $vChild = render(vChild, $vNode);
         if($vChild) {
-            $node.appendChild($vChild);
-            if(vChild.mounted) vChild.mounted.call(vChild, $vChild);
+            $vNode.appendChild($vChild);
+            dispatchMounted(vChild, $vChild);
         }
     }
 
-    return $node;
+    return $vNode;
+}
+
+const dispatchMounted = (vNode, $vNode) => {
+    if(!vNode._evt) return;
+    vNode.$element = $vNode;
+    vNode._evt.dispatch('mounted', vNode);
 }
 
 const reMountChild = (vNode) => {
     const $oldNode = vNode.$element;
     const $parent = $oldNode.parentElement;
-    const $node = render(vNode, $parent);
-    if($node) {
-        $parent.replaceChild($node, $oldNode);
-        if(vNode.mounted) vNode.mounted.call(vNode, $node);
+    const $vNode = render(vNode, $parent);
+    if($vNode) {
+        $parent.replaceChild($vNode, $oldNode);
+        dispatchMounted(vNode, $vNode);
     }
 }
 
 
 export const mount = (vNode, selector) => {
     const $parent = selector instanceof HTMLElement ? selector : document.querySelector(selector);
-    const $node = render(vNode, $parent);
-    if(vNode && $node){
-        $parent.parentElement.replaceChild($node, $parent);
-        if(vNode.mounted) vNode.mounted.call(vNode, $node);
+    const $vNode = render(vNode, $parent);
+    if(vNode && $vNode){
+        $parent.parentElement.replaceChild($vNode, $parent);
+        dispatchMounted(vNode, $vNode);
     }
-    return $node;
+    return $vNode;
 }

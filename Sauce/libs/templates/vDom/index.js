@@ -1,25 +1,33 @@
-export const vFragment = Symbol('vFragment');
+import Evt from '../Event';
 
+
+export const vFragment = Symbol('vFragment');
 export const vNode = (tag, attrs = [], ...children) => {
 
     children = children.flat(Infinity);
 
-    // Is component
-    if(typeof tag == 'function') {
-        return {callback : tag, attrs, children};
-    }
-
+    const _evt = new Evt();
+   
     // is fragment
-    if(tag == vFragment) {
+    if (tag == vFragment) {
         tag = 'div';
     }
 
     const node = {
-        tagName : tag,
+        tagName: tag,
         attrs,
-        children
+        children,
+        _evt,
+        on: _evt.on.bind(_evt),
+        off: _evt.off.bind(_evt),
+        dispatch: _evt.dispatch.bind(_evt),
     }
 
+     // Is component
+     if (typeof tag == 'function') {
+        node.callback = tag;
+        delete node.tagName;
+    }
 
     return node
 }

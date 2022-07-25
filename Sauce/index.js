@@ -72,20 +72,22 @@ const {
     copy,
     clean,
     nohtml,
-    images
+    images,
+    files2JSON
 } = {
     ...task,
     ...plugins
 }
 
 tasks('dist',
-        clean(config.dist),
+       // clean(config.dist),
         nohtml(config, config.dist),
         javascript('src/App/app.js', path.join(config.dist, 'js'), config),
         scss('src/scss/main.scss',  path.join(config.dist, 'css'), {config}),
         () => tasks({path : 'src/**/*.*', not : ['.js', '.scss', '.jpeg', '.jpg', '.png', '.json']}, copy(config.dist)),
         server({port : config?.server?.port || 3000}),
-        () => tasks('src/assets/**/*.*', images(config,  path.join(config.dist, 'assets')))
+        () => tasks('src/assets/**/*.*', files2JSON(path.join('src', 'App', 'data'))),
+       // () => tasks('src/assets/**/*.*', images(config,  path.join(config.dist, 'assets')))
     )
     .then((messages) => {
         watch('src/**/*.js', javascript('src/App/app.js',  path.join(config.dist, 'js'), config), nohtml(config, config.dist));
