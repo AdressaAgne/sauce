@@ -20,7 +20,7 @@ const task = (files, callback, values) => new Promise(async (resolve, reject) =>
     if(typeof files == 'object' && files.path) {
         return glob(files.path, async (err, _files) => {
             if(err) return console.log(err);
-            if(files.not) _files = _files.filter(file => !files.not.includes(path.extname(file)));
+            if(files.not) _files = _files.filter(file => !files.not.includes(path.extname(file).toLowerCase()));
             await callback(_files, values, files).then(resolve, reject);
         });
     }

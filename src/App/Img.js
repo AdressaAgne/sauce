@@ -14,22 +14,12 @@ const getClosestSize = (size, sizes = [480, 680, 1080, 1280, 1680, 1920]) => siz
 
 export default ({attrs : {$src}, on, dispatch}) => {
     const src = (size = 1080) => '/assets/' + $src + '-' + size + '.webp';
-    
-    on('created', e => {
-        console.log('created img', $src);
-    })
 
-    on('mounted', ({$element}) => {
-        console.log('mounted img', $src);
-
-        const setWidth = () => {
+    on('mounted', ({$element, state}) => {
+        visible.on($element, ({observer}) => {
             const rect = $element.parentElement.getBoundingClientRect();
             const width = rect.width * devicePixelRatio;
             $element.src = src(getClosestSize(width));
-        }
-        
-        visible.on($element, ({observer}) => {
-            setWidth();
             observer.unobserve($element);
             dispatch('loaded');
         });

@@ -7,9 +7,11 @@ const mime = require('mime-types');
 
 
 module.exports = server = ({
-    port = 1337
+    port = 1337,
+    debug = true,
+    root = 'dist',
 } = {}) => () => new Promise((resolve, reject) => {
-
+    if(!debug) return resolve();
     // Create a local server to receive data from
     const server = http.createServer((req, res) => {
         res.setHeader("server", "Sauce");
@@ -33,15 +35,15 @@ module.exports = server = ({
 
         const pages = {
             '/': (...args) => {
-                const errorFile = path.join(process.cwd(), 'dist', '_error.html');
-                const indexFile = path.join(process.cwd(), 'dist', 'index.html');
+                const errorFile = path.join(process.cwd(), root, '_error.html');
+                const indexFile = path.join(process.cwd(), root, 'index.html');
 
                 fs.access(errorFile)
                     .then(() => sendFile(errorFile, ...args)
                         .catch(err => error(err, ...args)))
                     .catch(() => sendFile(indexFile, ...args))
             },
-            '*': (...args) => sendFile(path.join(process.cwd(), 'dist', url), ...args)
+            '*': (...args) => sendFile(path.join(process.cwd(), root, url), ...args)
         }
 
         const callback = pages[url] || pages['*'] || ((...args) => error(404, ...args));

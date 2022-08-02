@@ -1,24 +1,32 @@
-export const render = (vNode, $parent) => {
+import Evt from '../Event';
+import {differ} from './diff';
+
+export const render = (vNode, $parent, update = false) => {
     if(typeof vNode == 'function') {
-        return render(vNode(), $parent);
+        return render(vNode.call(null), $parent);
     }
 
     if (!(vNode instanceof Object)) return document.createTextNode(String(vNode));
 
-    vNode.render = () => reMountChild(vNode);
+    
+    if(!vNode._evt.has('update')) vNode.on('update', e => {
+        const $oldElement = vNode.$element;
+        const $parent = $oldElement.parentElement
+        if(!$parent) return;
 
+        differ($oldElement, vNode);
+
+        vNode._isUpdating = false;
+    });
+
+    /**
+     * Component
+     */
     if (vNode.callback && typeof vNode.callback == 'function') {
-        const {attrs} = vNode;
-        const vComponentNode = vNode.callback({ 
-            state: {}, 
-            ...vNode
-        });
-
-        vNode.dispatch('created', vNode);
-        
-        vComponentNode.attrs = {...attrs, ...vComponentNode.attrs};
+        const vComponentNode = vNode.callback.call(null, vNode);
+        vNode.dispatch('created');
         vComponentNode.$element = render(vComponentNode, $parent);
-        vNode._evt.merge(vComponentNode._evt);
+
 
         return vComponentNode.$element || vComponentNode;
     }
@@ -28,19 +36,18 @@ export const render = (vNode, $parent) => {
     const $vNode = document.createElement(vNode.tagName);
     vNode.$element = $vNode;
 
-    vNode.dispatch('created', vNode);
-
-
     // set attributes
     if (vNode.attrs) {
         for (const key in vNode.attrs) {
             const value = vNode.attrs[key];
 
             if (key.slice(0, 2) == 'on') {
-                $vNode.addEventListener(key.slice(2).toLowerCase(), (e) => {
-                    value.call($vNode, e, $vNode, vNode);
-                });
-                
+                const event = key.slice(2).toLowerCase();
+                if(Evt.types.indexOf(event) > -1) {
+                    $vNode.addEventListener(event, e => value.call(null, e, $vNode));
+                } else {
+                    vNode.on(event, value);
+                }
                 continue;
             }
 
@@ -57,6 +64,8 @@ export const render = (vNode, $parent) => {
         }
     }
 
+    vNode.dispatch('created');
+
     // Append children
     for (let i = 0; i < vNode.children.length; i++) {
         const vChild = vNode.children[i];
@@ -71,21 +80,10 @@ export const render = (vNode, $parent) => {
 }
 
 const dispatchMounted = (vNode, $vNode) => {
-    if(!vNode._evt) return;
+    if(!vNode || !vNode.dispatch) return;
     vNode.$element = $vNode;
-    vNode._evt.dispatch('mounted', vNode);
+    vNode.dispatch('mounted');
 }
-
-const reMountChild = (vNode) => {
-    const $oldNode = vNode.$element;
-    const $parent = $oldNode.parentElement;
-    const $vNode = render(vNode, $parent);
-    if($vNode) {
-        $parent.replaceChild($vNode, $oldNode);
-        dispatchMounted(vNode, $vNode);
-    }
-}
-
 
 export const mount = (vNode, selector) => {
     const $parent = selector instanceof HTMLElement ? selector : document.querySelector(selector);

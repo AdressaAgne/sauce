@@ -4,7 +4,8 @@
   "description": "gulp lookalike",
   "main": "sauce.config.js",
   "scripts": {
-    "dev": "node Sauce/index.js"
+    "dev": "node Sauce/index.js",
+    "build": "node Sauce/index.js --build"
   },
   "author": "Agne Ødegaard",
   "license": "ISC",
