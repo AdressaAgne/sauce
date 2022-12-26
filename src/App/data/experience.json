@@ -1,44 +1,44 @@
 [
-    {
-      "title": "Frontend Web Developer",
-      "firm": "Adresseavisen",
-      "date": "Aug 2017 - Present",
-      "desc": "Current workplace"
-    },
-    {
-      "title": "Student assistant",
-      "firm": "NTNU i Gjøvik",
-      "date": "Aug 2016 - Dec 2016",
-      "desc": "HTML & CSS"
-    },
-    {
-      "title": "Photographer",
-      "firm": "Huset, Gjøvik",
-      "date": "Dec 2015 - Dec 2016",
-      "desc": "Volenter photographer at the student house at NTNU i Gjøvik"
-    },
-    {
-      "title": "Student assistant",
-      "firm": "NTNU i Gjøvik",
-      "date": "Jan 2016 - Jun 2016",
-      "desc": "JavaScript and jQuery"
-    },
-    {
-      "title": "Student assistant",
-      "firm": "NTNU i Gjøvik",
-      "date": "Aug 2015 - Dec 2015",
-      "desc": "HTML & CSS"
-    },
-    {
-      "title": "Norwegian University of Science and Technology (NTNU)",
-      "firm": "BacholerWeb development",
-      "date": "2014 - 2017",
-      "desc": ""
-    },
-    {
-      "title": "Tiller VGS",
-      "firm": "Generel Studie Kompetanse - Medier & Kommunikasjon",
-      "date": "2010 - 2013",
-      "desc": ""
-    }
-  ]
+	{
+		"title": "Editorial Tech Lead",
+		"firm": "Adresseavisen",
+		"date": "2017 - Present",
+		"desc": "Current workplace\nStarted as Editorial Web Developer\nAdresseavisen is my local regional newpaper"
+	},
+	{
+		"title": "Student assistant",
+		"firm": "NTNU i Gjøvik",
+		"date": "Aug 2016 - Dec 2016",
+		"desc": "HTML & CSS"
+	},
+	{
+		"title": "Photographer",
+		"firm": "Huset, Gjøvik",
+		"date": "Dec 2015 - Dec 2016",
+		"desc": "Volenter photographer at the student house at NTNU i Gjøvik"
+	},
+	{
+		"title": "Student assistant",
+		"firm": "NTNU i Gjøvik",
+		"date": "Jan 2016 - Jun 2016",
+		"desc": "JavaScript and jQuery"
+	},
+	{
+		"title": "Student assistant",
+		"firm": "NTNU i Gjøvik",
+		"date": "Aug 2015 - Dec 2015",
+		"desc": "HTML & CSS"
+	},
+	{
+		"title": "Norwegian University of Science and Technology (NTNU)",
+		"firm": "BacholerWeb development",
+		"date": "2014 - 2017",
+		"desc": ""
+	},
+	{
+		"title": "Tiller VGS",
+		"firm": "Generel Studie Kompetanse - Medier & Kommunikasjon",
+		"date": "2010 - 2013",
+		"desc": ""
+	}
+]

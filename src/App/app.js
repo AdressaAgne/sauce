@@ -1,108 +1,77 @@
 /**
  * Includes
  */
-import {vNode, vFragment, mount} from '../../Sauce/libs/templates/vDom';
+import { vNode, vFragment, mount } from '../../Sauce/libs/templates/vDom';
 
-import experience from './data/experience.json';
-import projects from './data/publication_img.json';
-import tech from './data/tech.json';
 import Img from './Img';
-import Zoomable from './Zoomable';
 
-import images from './data/files.json';
+const projects = [
+	{
+		title: 'Borgian and Burkes',
+		desc: `From the Harry Potter Universe, an extension to Diagon Alley (75978). Borgin and burkes the famus store Lord Voldemort worked at for a few years after Hogwarts.
+		This build features the Vanishing cabinet with an Green apple inside.
+		A glass cabinet with a diadem on top, also containing some goblets and skeletons.`,
+		url: 'https://www.bricklink.com/v3/studio/design.page?idModel=231879',
+		urls: [
+			{ name: 'Stud.io file', url: 'https://lego.agne.no/download/borgian_and_burkes.io' },
+			{ name: 'pdf', url: 'https://lego.agne.no/download/borgian_and_burkes.pdf' },
+		],
+		image: 'borgian_and_burkes',
+		publication: 'Harry Potter',
+	},
+];
 
 /**
  * Components
  */
 
-const Article = ({attrs : {$item : item}}) => 
-<article class={'publication' + (item.image ? '' : ' no-image')}>
-    <a href={item.url || '#'}>
-        <header if={item.image}>
-            <Img $src={'images/'+item.image} alt="image of publication" />
-        </header>
-        <main>
-            <h3 class="title">{item.title}</h3>
-            <p class="kicker" if={item.publication || item.firm || item.date || item.date_from}>
-                <strong if={item.publication || item.firm}>{item.publication || item.firm}</strong>
-                <strong if={item.date || item.date_from}>{item.date || item.date_from}</strong>
-            </p>
-            <p if={item.location} class="location">{item.location}</p>
-            
-            {item.desc.split("\n").map(p => <p if={p} class="description">{p}</p>)}
-        </main>
-    </a>
-</article>
+const Article = ({ attrs: { $item: item } }) => (
+	<article class={'publication' + (item.image ? '' : ' no-image')}>
+		<a href={item.url || '#'}>
+			<header if={item.image}>
+				<Img $src={item.image} alt='image of publication' />
+			</header>
+			<main>
+				<h3 class='title'>{item.title}</h3>
+				<p class='kicker' if={item.publication || item.firm || item.date || item.date_from}>
+					<strong if={item.publication || item.firm}>{item.publication || item.firm}</strong>
+					<strong if={item.date || item.date_from}>{item.date || item.date_from}</strong>
+				</p>
+				<p if={item.location} class='location'>
+					{item.location}
+				</p>
+				{item.desc.split('\n').map((p) => (
+					<p if={p} class='description'>
+						{p}
+					</p>
+				))}
+				<ul class='downloads' if={item.urls.length > 0}>
+					{item.urls.map(({ name, url }) => (
+						<li>
+							<a href={url}>{name}</a>
+						</li>
+					))}
+				</ul>
+			</main>
+		</a>
+	</article>
+);
 
-const Contact = () => 
-<section class="contant">
-    <h2>Contact</h2>
-    <ul class="links">
-        <li><a href="mailto:agne+web@agne.no">agne@agne.no</a></li>
-        <li><a href="https://github.com/OrangeeWeb">github.com/OrangeeWeb</a></li>
-        <li><a href="https://www.linkedin.com/in/agneode/">linkedin.com/in/agneode/</a></li>
-    </ul>
-</section>
+const Projects = () => (
+	<section class='grid'>
+		{projects.map((item) => (
+			<Article $item={item} />
+		))}
+	</section>
+);
 
-const About = () => 
-<section class="about">
-    <h1 class="title">Curriculum Vitae</h1>
-    <section class="profile">
-        <Img $src="me" alt="image of me" />
-    </section>
-    <section class="content">
-        <p class="name">Agne Ødegaard</p>
-        <p class="title">Full stack web developer</p>
-        <p class="location">Trondheim, Norway</p>
-    </section>
-</section>
-
-
-
-const Experience = () =>
-<section class="grid">
-    {experience.map(item => <Article $item={item} />)}
-</section>
-
-const Projects = () => 
-<section class="grid">
-    {projects.map(item => <Article $item={item} />)}
-</section>
-
-const Busswords = () => 
-<ul class="buzzwords">
-    {tech.map(item => <li><span>{item}</span></li>)}
-</ul>
-
-const Photos = () => 
-<section class="grid">
-    {images.photos.map(img => <Zoomable $src={'photos/' + img} alt="photo" />)}
-</section>
-
-
-const App = () => 
-<article class="viewport">
-    <header>
-        <About />
-    </header>
-    <main>
-        <h2>Experience & Education</h2>
-        <Experience />
-        
-        <h2>Publications</h2>
-        <Projects />
-        
-        <h2>Buzzwords</h2>
-        <Busswords />
-
-        <h2>Photos</h2>
-        <Photos />
-    </main>
-    <footer>
-        <Contact />
-    </footer>
-</article>
-
-
+const App = () => (
+	<article class='viewport'>
+		<main>
+			<h2>Lego creations</h2>
+			<Projects />
+		</main>
+	</article>
+);
 
 mount(<App />, window.env.id);
