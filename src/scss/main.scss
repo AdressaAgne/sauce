@@ -57,6 +57,157 @@
 	}
 }
 
+.calculator {
+	.inputs {
+		display: flex;
+		flex-wrap: nowrap;
+		flex-direction: column;
+	}
+	.result {
+		text-align: center;
+		width: 100%;
+		font-size: 2.5rem;
+		font-family: var(--font-headline);
+		padding-top: 2rem;
+		@extend %gradient-text;
+	}
+}
+.form-group {
+	flex: 1 1 50%;
+	@include mobile() {
+		flex: 0 0 100%;
+	}
+	background: var(--color-background);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 0.5rem 0;
+
+	input,
+	button {
+		touch-action: manipulation;
+		flex: 0 0 60%;
+		appearance: none;
+		background: rgba(0, 0, 0, 0.2);
+		text-align: center;
+		padding: 0.5rem;
+		font-size: 1.25rem;
+		border: 2px solid rgba(0, 0, 0, 0.4);
+		color: var(--color-text);
+		max-width: 200px;
+		border-radius: 0px;
+	}
+
+	button.btn {
+		flex: 0 0 3rem;
+		cursor: pointer;
+		background: none;
+		&:first-of-type {
+			border-radius: 3px 0px 0px 3px;
+			border-right-width: 0;
+		}
+		&:last-of-type {
+			border-left-width: 0;
+			border-radius: 0px 3px 3px 0px;
+		}
+		&:hover {
+			background: var(--color-gradient);
+		}
+	}
+
+	span {
+		float: left;
+		font-size: 0;
+		width: calc(4rem + 4px);
+		display: flex;
+		position: relative;
+		&::after {
+			content: attr(data-value);
+			display: block;
+			width: 1rem;
+			height: 0.5rem;
+			color: var(--color-white);
+			font-size: 0.875rem;
+			padding: 0.5rem;
+			text-align: center;
+			line-height: 0.5rem;
+			float: left;
+			border: 2px solid rgba(0, 0, 0, 0.5);
+
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+
+		$darken: 5%;
+		--color-coin-tin: #cecece;
+		--color-coin-tin-2: #{darken(#cecece, $darken)};
+		--color-coin-brass: #bc9731;
+		--color-coin-brass-2: #{darken(#bc9731, $darken)};
+
+		&.kr1,
+		&.kr5,
+		&.kr10,
+		&.kr20 {
+			&::after {
+				background: linear-gradient(60deg, var(--color-coin-brass), var(--color-coin-brass-2));
+				border-radius: 50%;
+				width: 1rem;
+				height: 1rem;
+				line-height: 1rem;
+				color: var(--color-black);
+			}
+		}
+
+		&.kr1,
+		&.kr5 {
+			&::after {
+				background: linear-gradient(60deg, var(--color-coin-tin), var(--color-coin-tin-2));
+			}
+		}
+
+		--color-money-50: #4c7c32;
+		--color-money-50-2: #{darken(#4c7c32, $darken)};
+		--color-money-100: #d84220;
+		--color-money-100-2: #{darken(#d84220, $darken)};
+		--color-money-200: #3087cb;
+		--color-money-200-2: #{darken(#3087cb, $darken)};
+		--color-money-500: #b67809;
+		--color-money-500-2: #{darken(#b67809, $darken)};
+		--color-money-1000: #855faa;
+		--color-money-1000-2: #{darken(#855faa, $darken)};
+
+		&.kr50,
+		&.kr100,
+		&.kr200,
+		&.kr500,
+		&.kr1000 {
+			&::after {
+				border-radius: 2px;
+				width: 2rem;
+				height: 0.5rem;
+			}
+		}
+
+		&.kr50::after {
+			background: linear-gradient(60deg, var(--color-money-50), var(--color-money-50-2));
+		}
+		&.kr100::after {
+			background: linear-gradient(60deg, var(--color-money-100), var(--color-money-100-2));
+		}
+		&.kr200::after {
+			background: linear-gradient(60deg, var(--color-money-200), var(--color-money-200-2));
+		}
+		&.kr500::after {
+			background: linear-gradient(60deg, var(--color-money-500), var(--color-money-500-2));
+		}
+		&.kr1000::after {
+			background: linear-gradient(60deg, var(--color-money-1000), var(--color-money-1000-2));
+		}
+	}
+}
+
 a {
 	text-decoration: none;
 	color: var(--color-primary);
@@ -79,6 +230,8 @@ h2 {
 	margin-bottom: 2rem;
 	display: inline-block;
 	font-size: 2rem;
+	text-align: center;
+	width: 100%;
 	@extend %gradient-text;
 }
 

@@ -3,73 +3,72 @@
  */
 import { vNode, vFragment, mount } from '../../Sauce/libs/templates/vDom';
 
-import Img from './Img';
+const values = [1, 5, 10, 20, 50, 100, 200, 500, 1000];
 
-const projects = [
-	{
-		title: 'Borgian and Burkes',
-		desc: `From the Harry Potter Universe, an extension to Diagon Alley (75978). Borgin and burkes the famus store Lord Voldemort worked at for a few years after Hogwarts.
-		This build features the Vanishing cabinet with an Green apple inside.
-		A glass cabinet with a diadem on top, also containing some goblets and skeletons.`,
-		url: 'https://www.bricklink.com/v3/studio/design.page?idModel=231879',
-		urls: [
-			{ name: 'Stud.io file', url: 'https://lego.agne.no/download/borgian_and_burkes.io' },
-			{ name: 'pdf', url: 'https://lego.agne.no/download/borgian_and_burkes.pdf' },
-		],
-		image: 'borgian_and_burkes',
-		publication: 'Harry Potter',
-	},
-];
+const numberFormatDecimal = (n, g = 3) => (n + '').replace(new RegExp(`(?!^)(?=(?:\\d{${g}})+(?:\\.|$))`, 'gm'), ' ').replace('.', ',');
+const numberFormat = (n, g = 3) => numberFormatDecimal(Math.round(n), g);
 
-/**
- * Components
- */
+const Calculator = (e) => {
+	const output = [];
+	const calc = () => {
+		const result = output.reduce((p, c, i) => {
+			return p + (values[i] || 0) * (c || 0);
+		}, 0);
 
-const Article = ({ attrs: { $item: item } }) => (
-	<article class={'publication' + (item.image ? '' : ' no-image')}>
-		<a href={item.url || '#'}>
-			<header if={item.image}>
-				<Img $src={item.image} alt='image of publication' />
-			</header>
-			<main>
-				<h3 class='title'>{item.title}</h3>
-				<p class='kicker' if={item.publication || item.firm || item.date || item.date_from}>
-					<strong if={item.publication || item.firm}>{item.publication || item.firm}</strong>
-					<strong if={item.date || item.date_from}>{item.date || item.date_from}</strong>
-				</p>
-				<p if={item.location} class='location'>
-					{item.location}
-				</p>
-				{item.desc.split('\n').map((p) => (
-					<p if={p} class='description'>
-						{p}
-					</p>
-				))}
-				<ul class='downloads' if={item.urls.length > 0}>
-					{item.urls.map(({ name, url }) => (
-						<li>
-							<a href={url}>{name}</a>
-						</li>
-					))}
-				</ul>
-			</main>
-		</a>
-	</article>
-);
+		e.$element.querySelector('.result').innerText = numberFormat(result) + 'kr.';
+	};
 
-const Projects = () => (
-	<section class='grid'>
-		{projects.map((item) => (
-			<Article $item={item} />
-		))}
-	</section>
-);
+	const inputs = values.map((value, i) => {
+		const callback = (_, elm) => {
+			output[i] = parseInt(elm.value);
+			elm.value = parseInt(elm.value) || 0;
+			calc();
+		};
+
+		const decrement = (_, e) => {
+			const elm = e.nextElementSibling;
+			elm.value = Math.max(0, parseInt(elm.value) - 1);
+			output[i] = parseInt(elm.value);
+			calc();
+		};
+
+		const increment = (_, e) => {
+			const elm = e.previousElementSibling;
+			elm.value = parseInt(elm.value) + 1;
+			output[i] = parseInt(elm.value);
+			calc();
+			calc();
+		};
+
+		return (
+			<div class='form-group'>
+				<span class={'kr' + value} data-value={value}>
+					{value}kr
+				</span>
+				<button class='btn' onClick={decrement}>
+					-
+				</button>
+				<input type='number' pattern='\d*' min='0' value='0' step='1' onInput={callback} />
+				<button class='btn' onClick={increment}>
+					+
+				</button>
+			</div>
+		);
+	});
+
+	return (
+		<section class='calculator'>
+			<div class='inputs'>{inputs}</div>
+			<div class='result'>{0}kr.</div>
+		</section>
+	);
+};
 
 const App = () => (
 	<article class='viewport'>
 		<main>
-			<h2>Lego creations</h2>
-			<Projects />
+			<h2>Oppgjør kalkulator</h2>
+			<Calculator />
 		</main>
 	</article>
 );
